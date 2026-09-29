@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Builds mosh-client for Android as a standalone executable, from unmodified
-# upstream sources: mosh 1.4.0, protobuf 21.12 and OpenSSL 3.2.1. This folder
+# upstream sources: mosh 1.4.0, protobuf 21.12 and OpenSSL 3.5.8. This folder
 # (this script, android/config.h and termshim/) plus those three upstream
 # tarballs is the complete corresponding source of the mosh-client binary
 # that OrangeSSH ships.
@@ -19,8 +19,8 @@ MOSH_VERSION="1.4.0"
 MOSH_SHA256="872e4b134e5df29c8933dff12350785054d2fd2839b5ae6b5587b14db1465ddd"
 PROTOBUF_VERSION="21.12"
 PROTOBUF_SHA256="2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09"
-OPENSSL_VERSION="3.2.1"
-OPENSSL_SHA256="83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39"
+OPENSSL_VERSION="3.5.8"
+OPENSSL_SHA256="a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2"
 ANDROID_API=26
 ABIS=("arm64-v8a" "x86_64")
 
@@ -65,7 +65,7 @@ fetch "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" \
 # ---------------------------------------------------------------------------
 # Host protoc, to generate mosh's protocol code
 # ---------------------------------------------------------------------------
-HOST_PREFIX="$WORK/host"
+HOST_PREFIX="$WORK/host-protobuf-$PROTOBUF_VERSION"
 if [ ! -x "$HOST_PREFIX/bin/protoc" ]; then
     echo "==> Building host protoc"
     rm -rf "$WORK/build/protobuf-host"
@@ -87,17 +87,19 @@ for ABI in "${ABIS[@]}"; do
     esac
     CC="$TOOLCHAIN/bin/${TRIPLE}${ANDROID_API}-clang"
     CXX="$TOOLCHAIN/bin/${TRIPLE}${ANDROID_API}-clang++"
-    PREFIX="$WORK/install/$ABI"
+    # Named by version, so a changed pin always builds afresh instead of
+    # reusing an older library left in the work directory.
+    PREFIX="$WORK/install/$ABI-openssl-$OPENSSL_VERSION-protobuf-$PROTOBUF_VERSION"
     mkdir -p "$PREFIX"
 
     # -- OpenSSL (libcrypto: AES-OCB for mosh's encryption) -----------------
     if [ ! -f "$PREFIX/lib/libcrypto.a" ]; then
         echo "  --> OpenSSL"
-        rm -rf "$WORK/build/openssl-$ABI"
-        mkdir -p "$WORK/build/openssl-$ABI"
-        tar xzf "$WORK/src/openssl-$OPENSSL_VERSION.tar.gz" -C "$WORK/build/openssl-$ABI" --strip-components=1
+        rm -rf "$WORK/build/openssl-$OPENSSL_VERSION-$ABI"
+        mkdir -p "$WORK/build/openssl-$OPENSSL_VERSION-$ABI"
+        tar xzf "$WORK/src/openssl-$OPENSSL_VERSION.tar.gz" -C "$WORK/build/openssl-$OPENSSL_VERSION-$ABI" --strip-components=1
         (
-            cd "$WORK/build/openssl-$ABI"
+            cd "$WORK/build/openssl-$OPENSSL_VERSION-$ABI"
             export ANDROID_NDK_ROOT="$ANDROID_NDK_HOME" PATH="$TOOLCHAIN/bin:$PATH"
             ./Configure "$OPENSSL_TARGET" -D__ANDROID_API__=$ANDROID_API --prefix="$PREFIX" \
                 --libdir=lib --openssldir="$PREFIX/ssl" no-shared no-tests no-ui-console \

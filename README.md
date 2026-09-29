@@ -8,7 +8,7 @@ Mosh client from **unmodified upstream source**:
 |---|---|---|
 | [Mosh](https://mosh.org) | 1.4.0 | GPL-3.0, with an OpenSSL linking exception |
 | [Protocol Buffers](https://github.com/protocolbuffers/protobuf) | 21.12 | BSD-3-Clause |
-| [OpenSSL](https://www.openssl.org) | 3.2.1 | Apache-2.0 |
+| [OpenSSL](https://www.openssl.org) | 3.5.8 | Apache-2.0 |
 | This folder's own files (`build.sh`, `android/`, `termshim/`) | | MIT, see `LICENSE` |
 
 `mosh-client` is a separate program. OrangeSSH starts it on a pseudo-terminal
