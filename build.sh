@@ -130,8 +130,9 @@ for ABI in "${ABIS[@]}"; do
     mkdir -p "$SRC"
     tar xzf "$WORK/src/mosh-$MOSH_VERSION.tar.gz" -C "$SRC" --strip-components=1
     cp "$HERE/android/config.h" "$SRC/config.h"
-    # What mosh's src/include/Makefile generates from the VERSION file.
-    printf '#define BUILD_VERSION "%s"\n' "$(cat "$SRC/VERSION")" > "$SRC/src/include/version.h"
+    # What mosh's src/include/Makefile generates. The release tarball has no
+    # VERSION file (that comes from git), so name the release instead.
+    printf '#define BUILD_VERSION "%s"\n' "mosh-$MOSH_VERSION" > "$SRC/src/include/version.h"
     for proto in "$SRC"/src/protobufs/*.proto; do
         "$PROTOC" --cpp_out="$SRC/src/protobufs" -I "$SRC/src/protobufs" "$proto"
     done
