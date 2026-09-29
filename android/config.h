@@ -1,0 +1,41 @@
+/* mosh's config.h for Android (bionic, API 26+), in place of running configure.
+   Curses comes from ../termshim (curses.h and term.h). */
+#define HAVE_CLOCK_GETTIME 1
+#define HAVE_SYS_TIME_H 1
+#define HAVE_LANGINFO_H 1
+#define HAVE_SYS_UIO_H 1
+#define HAVE_MEMORY 1
+#define HAVE_STD_SHARED_PTR 1
+#define HAVE_OPENSSL 1
+#define HAVE_PSELECT 1
+#define HAVE_FFSLL 1
+#define HAVE_DECL_FFSLL 1
+#define HAVE_STRTOLL 1
+#define HAVE_PIPE2 1
+#define HAVE_CEIL 1
+#define HAVE_FLOOR 1
+#define HAVE_WCHAR_T 1
+#define HAVE_MBRTOWC 1
+#define HAVE_WCWIDTH 1
+#define HAVE_ISWPRINT 1
+#define SIZEOF_WCHAR_T 4
+#define PACKAGE "mosh"
+#define PACKAGE_VERSION "1.4.0"
+#define PACKAGE_STRING "mosh 1.4.0"
+#define VERSION "1.4.0"
+#define RETSIGTYPE void
+#define HAVE_DECL_BE64TOH 1
+#define HAVE_DECL_HTOBE64 1
+#define HAVE_NETINET_IN_H 1
+#define HAVE_ENDIAN_H 1
+#define HAVE_GETTIMEOFDAY 1
+#define HAVE_CURSES_H 1
+#define HAVE_TERM_H 1
+#define HAVE_FORKPTY 1
+#define HAVE_CFMAKERAW 1
+#define HAVE_PTY_H 1
+#define HAVE_TERMIOS_H 1
+#define USE_OPENSSL_AES 1
+#define HAVE_IUTF8 1
+#define HAVE_SYS_IOCTL_H 1
+#define HAVE_UNISTD_H 1
